@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    .question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .answer {
+      margin: 10px 0;
+    }
+    .answer input {
+      margin-right: 10px;
+    }
+    #submit {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #submit:hover {
+      background-color: #218838;
+    }
+    #score {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="quiz">
+      <div class="question" id="question">Loading...</div>
+      <div class="answer">
+        <input type="radio" name="answer" id="a" class="answer-input">
+        <label for="a" id="a_text">Answer A</label>
+      </div>
+      <div class="answer">
+        <input type="radio" name="answer" id="b" class="answer-input">
+        <label for="b" id="b_text">Answer B</label>
+      </div>
+      <div class="answer">
+        <input type="radio" name="answer" id="c" class="answer-input">
+        <label for="c" id="c_text">Answer C</label>
+      </div>
+      <div class="answer">
+        <input type="radio" name="answer" id="d" class="answer-input">
+        <label for="d" id="d_text">Answer D</label>
+      </div>
+      <button id="submit">Submit</button>
+      <div id="score"></div>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is the capital of France?",
+        a: "Madrid",
+        b: "Berlin",
+        c: "Paris",
+        d: "Rome",
+        correct: "c"
+      },
+      {
+        question: "Which language runs in a web browser?",
+        a: "Python",
+        b: "Java",
+        c: "C++",
+        d: "JavaScript",
+        correct: "d"
+      },
+      {
+        question: "What does CSS stand for?",
+        a: "Central Style Sheets",
+        b: "Cascading Style Sheets",
+        c: "Cascading Simple Sheets",
+        d: "Cars SUVs Sailboats",
+        correct: "b"
+      }
+    ];
+
+    let currentQuiz = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const answerEls = document.querySelectorAll(".answer-input");
+    const a_text = document.getElementById("a_text");
+    const b_text = document.getElementById("b_text");
+    const c_text = document.getElementById("c_text");
+    const d_text = document.getElementById("d_text");
+    const submitBtn = document.getElementById("submit");
+    const scoreEl = document.getElementById("score");
+
+    function loadQuiz() {
+      deselectAnswers();
+      const currentQuizData = quizData[currentQuiz];
+      questionEl.textContent = currentQuizData.question;
+      a_text.textContent = currentQuizData.a;
+      b_text.textContent = currentQuizData.b;
+      c_text.textContent = currentQuizData.c;
+      d_text.textContent = currentQuizData.d;
+    }
+
+    function getSelected() {
+      let answer;
+      answerEls.forEach((el) => {
+        if (el.checked) {
+          answer = el.id;
+        }
+      });
+      return answer;
+    }
+
+    function deselectAnswers() {
+      answerEls.forEach((el) => el.checked = false);
+    }
+
+    submitBtn.addEventListener("click", () => {
+      const answer = getSelected();
+      if (answer) {
+        if (answer === quizData[currentQuiz].correct) {
+          score++;
+        }
+
+        currentQuiz++;
+        if (currentQuiz < quizData.length) {
+          loadQuiz();
+        } else {
+          quiz.innerHTML = `<h2>You answered ${score}/${quizData.length} questions correctly.</h2>
+                            <button onclick="location.reload()">Reload</button>`;
+        }
+      }
+    });
+
+    loadQuiz();
+  </script>
+</body>
+</html>
